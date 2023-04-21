@@ -1,0 +1,1 @@
+[{"pkgName":"cl-user","text":"(ql:quickload :rove)"},{"pkgName":"cl-user","text":"(ql:quickload :cl-ppcre)"},{"pkgName":"cl-user","text":"(ql:quickload :cl-csv)"},{"pkgName":"cl-user","text":"(ql:quickload :xmls)"}]
