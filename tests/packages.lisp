@@ -1,3 +1,4 @@
 (defpackage :cl-cdsi-support/tests
   (:use :cl
-        :rove))
+        :rove
+        :cl-cdsi-support))

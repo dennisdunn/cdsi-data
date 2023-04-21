@@ -5,4 +5,4 @@
         :cl-ppcre)
   (:export :antigen
            :antigen-ids
-           :schedule))
+           :get-data))

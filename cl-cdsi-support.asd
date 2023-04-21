@@ -2,9 +2,11 @@
            :author "Dennis Dunn <ansofive@gmail.com>"
            :license "MIT"
            :version "0.1.0"
-           :serial t
+           :depends-on ("xmls"
+                        "cl-csv"
+                        "cl-ppcre")
            :components ((:module "src"
-                                 :components ((:file "package")
+                                 :components ((:file "packages")
                                               (:file "config")
                                               (:file "antigen")
                                               (:file "schedule"))))
