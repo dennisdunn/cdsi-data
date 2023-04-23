@@ -1,8 +1,27 @@
-(defpackage :cl-cdsi-support
-  (:use :cl
-        :xmls
-        :cl-csv
-        :cl-ppcre)
-  (:export :antigen
-           :antigen-ids
-           :get-data))
+(defsystem "cl-cdsi-support"
+           :author "Dennis Dunn <ansofive@gmail.com>"
+           :license "MIT"
+           :version "0.1.0"
+           :depends-on ("xmls"
+                        "cl-ppcre")
+           :components ((:module "src"
+                                 :components ((:file "packages")
+                                              (:file "config")
+                                              (:file "antigen")
+                                              (:file "schedule"))))
+           :description ""
+           :in-order-to ((test-op (test-op "cl-cdsi-support/tests"))))
+
+(defsystem "cl-cdsi-support/tests"
+           :author "Dennis Dunn <ansofive@gmail.com>"
+           :license "MIT"
+           :version "0.1.0"
+           :serial t
+           :depends-on ("cl-cdsi-support"
+                        "rove")
+           :components ((:module "tests"
+                                 :components
+                                 ((:file "packages")
+                                  (:file "supporting-data"))))
+           :description "Test system for cl-cdsi-support"
+           :perform (test-op (op c) (symbol-call :rove :run c)))

@@ -3,7 +3,6 @@
            :license "MIT"
            :version "0.1.0"
            :depends-on ("xmls"
-                        "cl-csv"
                         "cl-ppcre")
            :components ((:module "src"
                                  :components ((:file "packages")
