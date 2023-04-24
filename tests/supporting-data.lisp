@@ -1,13 +1,19 @@
-(in-package :cl-cdsi-support/tests)
+(in-package :cl-user)
 
-(deftest test-the-antigen-schedules
+(defpackage :cdsi-data/tests
+  (:use :cl
+        :rove))
+
+(in-package :cdsi-data/tests)
+
+(deftest test-the-antigen-data-access
          (testing "fetch the antigen ids"
-                  (ok (= (length (cl-cdsi-support:antigen-ids)) 25)))
-         (testing "load a apecific antigen"
-                  (let ((data (cl-cdsi-support:antigen "Diphtheria")))
+                  (ok (= (length (antigen:catalog)) 25)))
+         (testing "load a apecific antigen supporting data"
+                  (let ((data (antigen:get-antigen "Diphtheria")))
                     (ok (not (null data))))))
 
-(deftest test-the-supporting-data
-         (testing "load supporting data"
-                  (let ((data (cl-cdsi-support:get-data)))
+(deftest test-the-schedule-data-access
+         (testing "load schedule supporting data"
+                  (let ((data (schedule:get-schedule)))
                     (ok (not (null data))))))
