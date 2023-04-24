@@ -20,6 +20,6 @@
                         "rove")
            :components ((:module "tests"
                                  :components
-                                 ((:file "supporting-data"))))
-           :description "Test system for cl-cdsi-support"
+                                 ((:file "main"))))
+           :description "Test system for cdsi-data."
            :perform (test-op (op c) (symbol-call :rove :run c)))
