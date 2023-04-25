@@ -1,16 +1,15 @@
 (in-package :cl-user)
 
-(defpackage :cdsi-data/config
-  (:nicknames :config)
+(defpackage :cdsi.data.config
   (:use :cl)
   (:export :*data-path*
            :*antigen-file-re*
            :*schedule-file-name*))
 
-(in-package :cdsi-data/config)
+(in-package :cdsi.data.config)
 
 (defparameter *data-path* (asdf:system-relative-pathname
-                            "cdsi-data"
+                            "cdsi.data"
                             "data/"))
 
 

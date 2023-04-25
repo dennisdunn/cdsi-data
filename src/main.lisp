@@ -1,14 +1,14 @@
 (in-package :cl-user)
 
-(defpackage :cdsi-data
+(defpackage :cdsi.data
   (:use :cl
-        :cdsi-data/config)
+        :cdsi.data.config)
   (:export :list-antigens
            :list-schedules
            :get-antigen
            :get-schedule))
 
-(in-package :cdsi-data)
+(in-package :cdsi.data)
 
 (defun list-antigens ()
   "Return a list of antigen names."
