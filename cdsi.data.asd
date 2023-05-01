@@ -3,7 +3,8 @@
            :license "MIT"
            :version "0.1.0"
            :depends-on ("xmls"
-                        "cl-ppcre")
+                        "cl-ppcre"
+                        "kebab")
            :components ((:module "src"
                                  :components ((:file "config")
                                               (:file "main")
