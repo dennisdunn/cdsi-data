@@ -6,7 +6,8 @@
                         "cl-ppcre")
            :components ((:module "src"
                                  :components ((:file "config")
-                                              (:file "main"))))
+                                              (:file "main")
+                                              (:file "utility"))))
            :description ""
            :in-order-to ((test-op (test-op "cdsi.data/tests"))))
 
