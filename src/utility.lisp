@@ -1,16 +1,20 @@
 (in-package :cdsi.data)
 
 (defun ->list (node)
+  "Transform a xmls:node into a property list. 
+  
+  xmls:nodes with the same name will be collected under a single plist key."
   (case (node-type node)
-    ('stringnode (list (->keyword (xmls:node-name node)) (xmls:xmlrep-string-child node)))
-    ('emptynode (list (->keyword (xmls:node-name node)) nil))
-    ('nodelist (list (->keyword (xmls:node-name node)) (combine-values (reduce #'append (mapcar #'->list (xmls:xmlrep-children node))))))))
+    ('empty (list (->keyword (xmls:node-name node)) nil))
+    ('string (list (->keyword (xmls:node-name node)) (xmls:xmlrep-string-child node)))
+    ('list (list (->keyword (xmls:node-name node)) (combine-values (reduce #'append (mapcar #'->list (xmls:xmlrep-children node))))))))
 
 (defun node-type (node)
+  "Classify the type of node based on its children."
   (let ((c (car (xmls:xmlrep-children node))))
-    (cond ((xmls:node-p c) 'nodelist)
-          ((or (null c) (and (stringp c) (string="" c))) 'emptynode)
-          (t 'stringnode))))
+    (cond ((xmls:node-p c) 'list)
+          ((or (null c) (and (stringp c) (string="" c))) 'empty)
+          (t 'string))))
 
 (defun ->keyword (name &optional (plural 1))
   "Intern a symbol named by the argument into the KEYWORD package."
