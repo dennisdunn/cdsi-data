@@ -1,43 +1,36 @@
 (in-package :cdsi.data)
 
-(defun node->plist (node &optional (plist nil))
-  "Build a plist from an xmlrep object."
-  (let* ((c (xmls:xmlrep-children node))
-         (k (name->key (xmls:node-name  node))
-         (v (cond ((or (null c) (empty-p c)) nil)
-                  ((string-p c) (car c))
-                  (t (mapcar #'(lambda (n) (node->plist n plist)) c)))))
-    (append plist (list k (if (listp v)
-                              (reduce #'append v)
-                              v)))))
+(defun ->list (node)
+  (case (node-type node)
+    ('stringnode (list (->keyword (xmls:node-name node)) (xmls:xmlrep-string-child node)))
+    ('emptynode (list (->keyword (xmls:node-name node)) nil))
+    ('nodelist (list (->keyword (xmls:node-name node)) (combine-values (reduce #'append (mapcar #'->list (xmls:xmlrep-children node))))))))
 
-(defun name->key (name)
-  (intern (string-upcase (kebab:to-kebab-case (string name))) :keyword))
+(defun node-type (node)
+  (let ((c (car (xmls:xmlrep-children node))))
+    (cond ((xmls:node-p c) 'nodelist)
+          ((or (null c) (and (stringp c) (string="" c))) 'emptynode)
+          (t 'stringnode))))
 
-(defun string-p (children)
-  (and (eq 1 (length children))
-       (stringp (car children))))
-
-(defun empty-p (children)
-  (and (string-p children)
-       (string= "" (car children))))
+(defun ->keyword (name &optional (plural 1))
+  "Intern a symbol named by the argument into the KEYWORD package."
+  (intern (format nil "~:@(~a~p~)" (kebab:to-kebab-case (string name)) plural) :keyword))
 
 (defun get-keys (plist)
   "Return all of the distinct keys in the plist."
-  (remove-duplicates (loop for (k v) on plist by #'cddr collect k) :test #'string=))
+  (remove-duplicates (loop for (k) on plist by #'cddr collect k)))
 
 (defun get-values-by-key (key plist)
   "Get all of the values for a specified key."
   (loop for (k v) on plist by #'cddr
-          if (string= k key)
-        collect v))
+          when (eq k key) collect v))
 
-(defun squash (plist)
+(defun combine-values (plist)
   "Combine values for duplicate keys under one key."
-  (let ((l '()))
+  (let ((result '()))
     (dolist (k (get-keys plist))
       (let* ((v (get-values-by-key k plist))
-             (v1 (if (eq 1 (length v)) (car v) v)))
-        (push k l)
-        (push v1 l)))
-    (reverse l)))
+             (plural (if (< (length v) 2) 1 2)))
+        (push (->keyword k plural) result)
+        (push (if (eq 1 plural) (car v) v) result)))
+    (reverse result)))
