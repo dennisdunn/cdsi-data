@@ -1,17 +1,8 @@
-(in-package :cl-user)
-
-(defpackage :cdsi.data.config
-  (:use :cl)
-  (:export :*data-path*
-           :*antigen-file-re*
-           :*schedule-file-name*))
-
-(in-package :cdsi.data.config)
+(in-package :cdsi.data)
 
 (defparameter *data-path* (asdf:system-relative-pathname
                             "cdsi.data"
                             "data/"))
-
 
 (defparameter *antigen-file-re* "AntigenSupportingData- (.*)-508.xml")
 

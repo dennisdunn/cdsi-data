@@ -3,10 +3,13 @@
            :license "MIT"
            :version "0.1.0"
            :depends-on ("xmls"
-                        "cl-ppcre"
-                        "kebab")
+                        "kebab"
+                        "cl-ppcre")
            :components ((:module "src"
-                                 :components ((:file "config")
+                                 :components ((:file "packages")
+                                              (:file "config")
+                                              (:file "parsers")
+                                              (:file "xml")
                                               (:file "main"))))
            :description ""
            :in-order-to ((test-op (test-op "cdsi.data/tests"))))
