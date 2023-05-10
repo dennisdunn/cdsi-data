@@ -7,8 +7,7 @@
                         "kebab")
            :components ((:module "src"
                                  :components ((:file "config")
-                                              (:file "main")
-                                              (:file "utility"))))
+                                              (:file "main"))))
            :description ""
            :in-order-to ((test-op (test-op "cdsi.data/tests"))))
 
