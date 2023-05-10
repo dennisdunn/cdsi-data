@@ -1,9 +1,11 @@
 (in-package :cdsi.data)
 
-(defparameter *data-path* (asdf:system-relative-pathname
-                            "cdsi.data"
-                            "data/"))
+(defparameter *antigen-path* (asdf:system-relative-pathname
+                               "cdsi.data"
+                               "data/antigens/")) ; don't forget the trailing slash!
 
-(defparameter *antigen-file-re* "AntigenSupportingData- (.*)-508.xml")
+(defparameter *schedule-path* (asdf:system-relative-pathname
+                                "cdsi.data"
+                                "data/ScheduleSupportingData.xml"))
 
-(defparameter *schedule-file-name* #P"ScheduleSupportingData.xml")
+(defparameter *antigen-name-re* "AntigenSupportingData- (.*)-508")

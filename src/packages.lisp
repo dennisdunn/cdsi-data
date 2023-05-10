@@ -6,6 +6,6 @@
            :list-schedules
            :get-antigen
            :get-schedule
-           :*data-path*
-           :*antigen-file-re*
-           :*schedule-file-name*))
+           :*antigen-path*
+           :*schedule-path*
+           :*antigen-name-re*))

@@ -1,28 +1,41 @@
 (in-package :cdsi.data)
 
+(defparameter *schedules* (lazy (load-schedule)))
+(defparameter *antigens* (lazy (load-antigens)))
+
 (defun list-antigens ()
-  "Return a list of antigen names."
-  (cons :antigens (remove-if #'null
-                      (mapcar (lambda (fname)
-                                (ppcre:register-groups-bind (antigen)
-                                                            (*antigen-file-re* (namestring fname))
-                                                            antigen))
-                          (uiop:directory-files *data-path*)))))
+  "Return a list of antigen identifiers."
+  (loop for (k) on (force *antigens*) by #'cddr collect k))
 
 (defun get-antigen (id)
-  "Load and parse the antigen file identified by the name."
-  (let* ((fname (ppcre:regex-replace "[(.*)]+" *antigen-file-re* id))
-         (path (merge-pathnames *data-path* fname)))
-    (->node (xmls:parse (uiop:read-file-string path)))))
+  "Get the antigen data for the specified antigen identifier."
+  (getf (force *antigens*) id))
 
 (defun list-schedules ()
-  (cons :schedules (mapcar #'xmls:node-name (xmls:xmlrep-children (load-schedule)))))
+  "Return a list of schedule identifiers."
+  (loop for (k) on (force *schedules*) by #'cddr collect k))
 
 (defun get-schedule (id)
-  (cons (->keyword id) (xmls:xmlrep-children (find-if #'(lambda (node)
-                                                          (string= id (xmls:node-name node)))
-                                               (xmls:xmlrep-children (load-schedule))))))
+  "Get the schedule data for the specified schedule identifier."
+  (getf (force *schedules*) id))
 
 (defun load-schedule ()
   "Load the schedule supporting data."
-  (xmls:parse (uiop:read-file-string (merge-pathnames *data-path* *schedule-file-name*))))
+  (second (->list (xmls:parse (uiop:read-file-string *schedule-path*)))))
+
+(defun load-antigens ()
+  "Load the antigen supporting data."
+  (reduce #'append (mapcar #'make-antigen-plist (uiop:directory-files *antigen-path*))))
+
+(defun make-antigen-plist (path)
+  "Create a property list from the antigens name and data."
+  (list (path->keyword path) (second (->list (xmls:parse (uiop:read-file-string path))))))
+
+(defun ->keyword (name &optional (plural 1))
+  "Intern a symbol named by the argument into the KEYWORD package."
+  (intern (format nil "~:@(~a~p~)" (kebab:to-kebab-case (string name)) plural) :keyword))
+
+(defun path->keyword (path)
+  "Return the antigens name as a keyword."
+  (->keyword (cl-ppcre:register-groups-bind (key) (*antigen-name-re* (pathname-name path))
+               key)))
