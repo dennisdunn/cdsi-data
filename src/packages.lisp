@@ -5,7 +5,4 @@
   (:export :list-antigens
            :list-schedules
            :get-antigen
-           :get-schedule
-           :*antigen-path*
-           :*schedule-path*
-           :*antigen-name-re*))
+           :get-schedule))
