@@ -21,15 +21,16 @@
 
 (defun load-schedule ()
   "Load the schedule supporting data."
-  (second (->list (xmls:parse (uiop:read-file-string *schedule-path*)))))
+  (with-open-file (stream (merge-pathnames *data-path* *schedule-name*))
+    (second (->list (xmls:parse stream)))))
 
 (defun load-antigens ()
   "Load the antigen supporting data."
-  (reduce #'append (mapcar #'make-antigen-plist (uiop:directory-files *antigen-path*))))
-
-(defun make-antigen-plist (path)
-  "Create a property list from the antigens name and data."
-  (list (path->keyword path) (second (->list (xmls:parse (uiop:read-file-string path))))))
+  (reduce #'append (mapcar #'(lambda (path)
+                               (with-open-file (stream path)
+                                 (list (path->keyword path) (second (->list (xmls:parse stream))))))
+                     (remove-if #'(lambda (path) (string= (file-namestring path) *schedule-name*))
+                       (uiop:directory-files *data-path*)))))
 
 (defun ->keyword (name &optional (plural 1))
   "Intern a symbol named by the argument into the KEYWORD package."
